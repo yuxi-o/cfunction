@@ -55,10 +55,27 @@ int main()
 	pst->sw_b = 1;
 	strcpy(pst->name, "WORLD");
 	printf("pst->no[%d], pst->id[%d], pst->name[%s]\n", pst->no, pst->id, pst->name);
+	printf("pst->anticollision_front[%u], pst->anticollision_back[%u], pst->charge_detect[%u], pst->sw_a[%u], pst->sw_b[%u]\n", pst->anticollision_front, pst->anticollision_back, pst->charge_detect, pst->sw_a, pst->sw_b);
 	printf("sizeof struct student is %ld\n", sizeof(struct student));
 	
 	int i;
 	char *pc = (char *)pst;
+	for(i = 0; i <ssize;){
+		printf("%.2X ", (char)pc[i]&0xFF);
+		i++;
+		if(i % 8 == 0){
+			printf("\n");
+		}
+	}
+	printf("\n");
+
+	struct student *pst1 = (struct student*)malloc(ssize);
+	if(pst1 == NULL){
+		printf("malloc error!\n");
+		exit(-1);
+	}
+	memcpy(pst1, pst, ssize);
+	pc = (char *)pst1;
 	for(i = 0; i <ssize;){
 		printf("%.2X ", (char)pc[i]&0xFF);
 		i++;
