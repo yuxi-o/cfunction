@@ -9,7 +9,7 @@
 #include <string.h>
 #include <errno.h>
 
-#define MAXLINE 5
+#define MAXLINE 512
 #define OPEN_MAX 100
 #define LISTENQ 20
 #define SERV_PORT 5000
@@ -35,9 +35,10 @@ void setnonblocking(int sock)
 int main(int argc, char* argv[])
 {
     int i, listenfd, connfd, sockfd,epfd,nfds, portnumber;
-    ssize_t n;
+    ssize_t n, nbytes;
     char line[MAXLINE];
     socklen_t clilen;
+	int ret = 0;
 
 
     if ( 2 == argc )
@@ -79,6 +80,9 @@ int main(int argc, char* argv[])
     char *local_addr="127.0.0.1";
     inet_aton(local_addr,&(serveraddr.sin_addr));
     serveraddr.sin_port=htons(portnumber);
+
+	int on = 1;
+	setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(int));
     bind(listenfd,(struct sockaddr *)&serveraddr, sizeof(serveraddr));
     listen(listenfd, LISTENQ);
     for ( ; ; ) {
@@ -90,6 +94,7 @@ int main(int argc, char* argv[])
         {
             if(events[i].data.fd==listenfd)//如果新监测到一个SOCKET用户连接到了绑定的SOCKET端口，建立新的连接。
             {
+				clilen = sizeof(clientaddr);
                 connfd = accept(listenfd, (struct sockaddr *)&clientaddr, &clilen);
                 if(connfd<0){
                     perror("connfd<0");
@@ -112,11 +117,14 @@ int main(int argc, char* argv[])
                 printf("EPOLLIN\n");
                 if ( (sockfd = events[i].data.fd) < 0)
                     continue;
+
+				nbytes = 0;
+				memset(line, 0, MAXLINE);
 				while(1){
-					memset(line, 0, MAXLINE);
-					n = read(sockfd, line, MAXLINE-1);
+					n = read(sockfd, line+nbytes, MAXLINE-1-nbytes);
 					if (n > 0){
 						printf("read(%ld): %s\n", n, line);
+						nbytes += n;
 					} else if( n < 0){
 						if ((errno == EAGAIN) || errno == EWOULDBLOCK){
 							printf("read over\n");
@@ -143,8 +151,17 @@ int main(int argc, char* argv[])
             } 
 			else if(events[i].events&EPOLLOUT) // 如果有数据发送
             {
+				printf("EPOLLOUT\n");
                 sockfd = events[i].data.fd; // 应该用struct管理fd和数据line
-                write(sockfd, line, n);
+                ret = write(sockfd, line, nbytes);
+				if(ret < 0){
+					if(errno == EPIPE){
+						close(sockfd);
+						events[i].data.fd = -1;
+						break;
+					}
+					perror("EPOLLOUT write");
+				}
                 //设置用于读操作的文件描述符
                 ev.data.fd=sockfd;
                 //设置用于注册读操作事件

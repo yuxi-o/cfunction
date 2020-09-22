@@ -17,22 +17,28 @@ int main()
 
     epfd = epoll_create(1);
 
-	fd = open("text", O_RDONLY);
+	fd = open("text", O_RDWR);
 	if (fd < 0){
 		perror("open");
 		exit(1);
 	}
 
     event.data.fd = fd;
+//    event.data.fd = STDIN_FILENO;
     event.events = EPOLLIN ;
-    epoll_ctl(epfd, EPOLL_CTL_ADD, STDIN_FILENO, &event);
+//	event.events = EPOLLOUT; // not report event
+//    epoll_ctl(epfd, EPOLL_CTL_ADD, STDIN_FILENO, &event);
+    epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &event);
     while (1) {
         nfds = epoll_wait(epfd, events, 5, -1);
         int i;
         for (i = 0; i < nfds; ++i) {
             if (events[i].data.fd == fd) {
+				printf("monitor common fd event\n");
+//            if (events[i].data.fd == STDIN_FILENO) {
 				memset(buff, 0, sizeof(buff));
 				ret = read(fd, buff, sizeof(buff));
+//				ret = read(STDIN_FILENO, buff, sizeof(buff));
 				if (ret > 0){
 					printf("%d:%s\n", ret, buff);
 				} else {
