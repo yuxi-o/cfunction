@@ -1,0 +1,5 @@
+*.o
+*.swp
+*.bak
+
+ppp_call

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+touch /tmp/link.ppp0
+
+route del default
+route add -net 0.0.0.0 ppp0
+
+ln -s /etc/ppp/resolv.conf /etc/resolv.conf 
+
+exit 0
+

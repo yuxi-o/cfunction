@@ -1,0 +1,8 @@
+#!/bin/bash
+
+unlink /tmp/link.ppp0
+unlink /etc/resolv.conf
+
+[ -e /var/run/resolv.conf ] && ln -s /var/run/resolv.conf /etc/resolv.conf
+
+exit 0
