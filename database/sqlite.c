@@ -7,6 +7,7 @@
 
 #define SQLITE_BUSY_TIMEOUT		10
 #define SQLITE_QUERY_MAX_NUM	10
+#define SQLITE_QUERY_ITEM_LEN	12
 #define SENSOR_DB_PATH			"/usr/local/db/sensor.db"
 
 static int busy_handler(void *arg, int repeat)
@@ -124,13 +125,14 @@ int modify_sql(sqlite3 *db, const char *sql)
 int result_callback(void *in, int argc, char *argv[], char *argvv[])
 {
 	int i = 0;
-	int *arr = (int *)in;
+	char *arr = (char *)in;
+	int count = arr?*(arr + SQLITE_QUERY_MAX_NUM*SQLITE_QUERY_ITEM_LEN):0;
 
 	for(;i < argc; i++){
 		printf("%s=%s ", argvv[i], argv[i]?argv[i]:"NULL");
-		if(arr && (!strcmp(argvv[i], "id"))){
-			arr[arr[SQLITE_QUERY_MAX_NUM]] = atoi(argv[i]);
-			arr[SQLITE_QUERY_MAX_NUM]++;
+		if(arr && !strcmp(argvv[i], "id")){
+			strcpy(arr + count*SQLITE_QUERY_ITEM_LEN, argv[i]);
+			*(arr + SQLITE_QUERY_MAX_NUM*SQLITE_QUERY_ITEM_LEN) = count + 1;
 		}
 	}
 	printf("\n");
@@ -138,12 +140,12 @@ int result_callback(void *in, int argc, char *argv[], char *argvv[])
 	return 0;
 }
 
-int select_sql(sqlite3 *db, const char *sql, sqlite3_callback callback, int arr[])
+int select_sql(sqlite3 *db, const char *sql, sqlite3_callback callback, void *arr)
 {
 	int ret = 0;
 	char *err = NULL;
 
-	ret = sqlite3_exec(db, sql, callback, arr, &err);
+	ret = sqlite3_exec(db, sql, callback, (void *)arr, &err);
 	if(ret != SQLITE_OK){
 		printf("exec select sql(%s) error: %s", sql, err);
 		sqlite3_free(err);
@@ -195,7 +197,8 @@ int main(int argc, char *argv[])
 	int ret = 0;
 	sqlite3 *db;
 	char sql[512], cbuf[16];
-	int id_arr[SQLITE_QUERY_MAX_NUM+1] = {0};
+//	int id_arr[SQLITE_QUERY_MAX_NUM+1] = {0};
+	char id_arr[SQLITE_QUERY_MAX_NUM+1][SQLITE_QUERY_ITEM_LEN] = {0};
 
 	ret = create_database(&db, SENSOR_DB_PATH, create_backup_table);
 	if(ret){
@@ -213,27 +216,28 @@ int main(int argc, char *argv[])
 	}
 
 	// select
-	memset(id_arr, 0, sizeof(id_arr));
 	memset(sql, 0, 512);
+	id_arr[SQLITE_QUERY_MAX_NUM][0] = 0;
 	sprintf(sql, "select * from backup_table limit %d;", SQLITE_QUERY_MAX_NUM);
-	select_sql(db, sql, result_callback, id_arr);
-	if(id_arr[SQLITE_QUERY_MAX_NUM]){
+	select_sql(db, sql, result_callback, (void *)id_arr);
+	if(id_arr[SQLITE_QUERY_MAX_NUM][0]){
 		// delete
 		memset(sql, 0, 512);
 		sprintf(sql, "delete from backup_table where id in (0");
-		for(i = 0; i < id_arr[SQLITE_QUERY_MAX_NUM]; i++){
+		for(i = 0; i < id_arr[SQLITE_QUERY_MAX_NUM][0]; i++){
 			strcat(sql, ",");
-			strcat(sql, itoa(id_arr[i], cbuf, 10));
+//			strcat(sql, itoa(id_arr[i], cbuf, 10));
+			strcat(sql, id_arr[i]);
 		}
 		strcat(sql, ");");
+		printf("delete sql: %s\n", sql);
 		modify_sql(db, sql);
 	}
 
 	// select
 	printf("Current data----------\n");
-	memset(id_arr, 0, sizeof(id_arr));
 	sprintf(sql, "select * from backup_table;");
-	select_sql(db, sql, result_callback, id_arr);
+	select_sql(db, sql, result_callback, NULL);
 
 	sqlite3_close(db);
 
