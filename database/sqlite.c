@@ -8,6 +8,7 @@
 #define SQLITE_BUSY_TIMEOUT		10
 #define SQLITE_QUERY_MAX_NUM	10
 #define SQLITE_QUERY_ITEM_LEN	12
+#define SQLITE_SQL_MAX_LEN		512
 #define SENSOR_DB_PATH			"/usr/local/db/sensor.db"
 
 static int busy_handler(void *arg, int repeat)
@@ -140,6 +141,50 @@ int result_callback(void *in, int argc, char *argv[], char *argvv[])
 	return 0;
 }
 
+int update_callback(void *in, int argc, char *argv[], char *argvv[])
+{
+	int i = 0, index_id = 0, index_data = 0;
+	char sql[SQLITE_SQL_MAX_LEN] = {0};
+
+	for(; i < argc; i++){
+		if(!strcmp(argvv[i], "data")){
+			index_data = i;
+		} else if(!strcmp(argvv[i], "id")){
+			index_id = i;
+		}
+	}
+
+	sprintf(sql, "update backup_table set flag=0 where id=%s;", argv[index_id]);
+	printf("update sql: %s\n", sql);
+	if(modify_sql((sqlite3 *)in, sql)){
+		return -1;
+	}
+
+	return 0;
+}
+
+int delete_callback(void *in, int argc, char *argv[], char *argvv[])
+{
+	int i = 0, index_id = 0, index_data = 0;
+	char sql[SQLITE_SQL_MAX_LEN] = {0};
+
+	for(; i < argc; i++){
+		if(!strcmp(argvv[i], "data")){
+			index_data = i;
+		} else if(!strcmp(argvv[i], "id")){
+			index_id = i;
+		}
+	}
+
+	sprintf(sql, "delete from backup_table where id=%s;", argv[index_id]);
+	printf("delete sql: %s\n", sql);
+	if(modify_sql((sqlite3 *)in, sql)){
+		return -1;
+	}
+
+	return 0;
+}
+
 int select_sql(sqlite3 *db, const char *sql, sqlite3_callback callback, void *arr)
 {
 	int ret = 0;
@@ -193,7 +238,7 @@ char *itoa(int num, char *str, int radix)
 #if 1
 int main(int argc, char *argv[])
 {
-	int i = SQLITE_QUERY_MAX_NUM + 1;//10; 
+	int i = 5; //SQLITE_QUERY_MAX_NUM + 1;//10; 
 	int ret = 0;
 	sqlite3 *db;
 	char sql[512], cbuf[16];
@@ -219,6 +264,8 @@ int main(int argc, char *argv[])
 	memset(sql, 0, 512);
 	id_arr[SQLITE_QUERY_MAX_NUM][0] = 0;
 	sprintf(sql, "select * from backup_table limit %d;", SQLITE_QUERY_MAX_NUM);
+//	select_sql(db, sql, delete_callback, db);
+#if 0
 	select_sql(db, sql, result_callback, (void *)id_arr);
 	if(id_arr[SQLITE_QUERY_MAX_NUM][0]){
 		// delete
@@ -233,6 +280,7 @@ int main(int argc, char *argv[])
 		printf("delete sql: %s\n", sql);
 		modify_sql(db, sql);
 	}
+#endif
 
 	// select
 	printf("Current data----------\n");
