@@ -1,0 +1,75 @@
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时18分54秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时18分54秒  1000     10019         -      0.06      0.00 6308300    7072   0.06  a.out
+16时18分54秒  1000         -     10019      0.06      0.00 6308300    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时18分55秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时18分55秒  1000     10019         -      0.06      0.00 6312400    7072   0.06  a.out
+16时18分55秒  1000         -     10019      0.06      0.00 6312400    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时18分56秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时18分56秒  1000     10019         -      0.06      0.00 6316500    7072   0.06  a.out
+16时18分56秒  1000         -     10019      0.06      0.00 6316500    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时18分57秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时18分57秒  1000     10019         -      0.06      0.00 6320600    7072   0.06  a.out
+16时18分57秒  1000         -     10019      0.06      0.00 6320600    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时18分58秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时18分58秒  1000     10019         -      0.06      0.00 6324700    7072   0.06  a.out
+16时18分58秒  1000         -     10019      0.06      0.00 6324700    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时18分59秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时18分59秒  1000     10019         -      0.06      0.00 6328800    7072   0.06  a.out
+16时18分59秒  1000         -     10019      0.06      0.00 6328800    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分00秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分00秒  1000     10019         -      0.06      0.00 6337000    7072   0.06  a.out
+16时19分00秒  1000         -     10019      0.06      0.00 6337000    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分01秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分01秒  1000     10019         -      0.06      0.00 6341100    7072   0.06  a.out
+16时19分01秒  1000         -     10019      0.06      0.00 6341100    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分02秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分02秒  1000     10019         -      0.06      0.00 6345200    7072   0.06  a.out
+16时19分02秒  1000         -     10019      0.06      0.00 6345200    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分03秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分03秒  1000     10019         -      0.06      0.00 6349300    7072   0.06  a.out
+16时19分03秒  1000         -     10019      0.06      0.00 6349300    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分04秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分04秒  1000     10019         -      0.06      0.00 6353400    7072   0.06  a.out
+16时19分04秒  1000         -     10019      0.06      0.00 6353400    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分08秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分08秒  1000     10019         -      0.06      0.00 6365700    7072   0.06  a.out
+16时19分08秒  1000         -     10019      0.06      0.00 6365700    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分09秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分09秒  1000     10019         -      0.06      0.00 6369800    7072   0.06  a.out
+16时19分09秒  1000         -     10019      0.06      0.00 6369800    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分10秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分10秒  1000     10019         -      0.06      0.00 6373900    7072   0.06  a.out
+16时19分10秒  1000         -     10019      0.06      0.00 6373900    7072   0.06  |__a.out
+Linux 5.11.0-38-generic (wang-pc) 	2022年04月22日 	_x86_64_	(4 CPU)
+
+16时19分11秒   UID      TGID       TID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+16时19分11秒  1000     10019         -      0.06      0.00 6378000    7072   0.06  a.out
+16时19分11秒  1000         -     10019      0.06      0.00 6378000    7072   0.06  |__a.out
