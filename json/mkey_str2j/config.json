@@ -1,0 +1,18 @@
+{
+	"Product": "BoxBox",
+	"ProductSn": "WB0123456789",
+	"ProductKey": "aap123jjdqh",
+	"DeviceName": "abcdefg",
+	"DeviceSecret": "dddddddaaaabbbcccddddd",
+
+	"MqttConfig":{
+		"url": "92.168.3.222",
+		"port": 1881,
+		"isLive": false
+	},
+	"Addr":[
+		"Beijing",
+		"Henan",
+		"Tianjin"
+	]
+}
