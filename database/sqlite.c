@@ -1,3 +1,4 @@
+// gcc sqlite.c -Wall -lsqlite3
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -9,7 +10,9 @@
 #define SQLITE_QUERY_MAX_NUM	10
 #define SQLITE_QUERY_ITEM_LEN	12
 #define SQLITE_SQL_MAX_LEN		512
-#define SENSOR_DB_PATH			"/usr/local/db/sensor.db"
+//#define SENSOR_DB_PATH			"/usr/local/db/sensor.db"
+#define SENSOR_DB_PATH			"/tmp/sensor.db"
+
 
 static int busy_handler(void *arg, int repeat)
 {
@@ -90,6 +93,9 @@ int create_backup_table(sqlite3 *db)
 		return -1;
 	}
 	*/
+
+	sqlite3_exec(db, "CREATE TABLE rttable(ID integer primary key, polld text, time integer, value real, extend text default '0');", NULL, NULL, NULL);
+	sqlite3_exec(db, "CREATE UNIQUE INDEX idx_rtd on rttable(polld);", NULL, NULL, NULL);
 
 	return 0;
 }
@@ -260,6 +266,17 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	i = 5;
+	while(i-- > 0){
+		memset(sql, 0, 512);
+		sprintf(sql, "replace into rttable(polld, time, value, extend) values('%s%d', %ld, %f, '%s');", 
+				"water", i, time(NULL), 30.5, "NO");   // 替换原来数据，每个polld只保留一份数据
+		if(modify_sql(db, sql)){
+			break;
+		}
+		sleep(1);
+	}
+
 	// select
 	memset(sql, 0, 512);
 	id_arr[SQLITE_QUERY_MAX_NUM][0] = 0;
@@ -285,6 +302,10 @@ int main(int argc, char *argv[])
 	// select
 	printf("Current data----------\n");
 	sprintf(sql, "select * from backup_table;");
+	select_sql(db, sql, result_callback, NULL);
+
+	printf("Current data----------\n");
+	sprintf(sql, "select * from rttable;");
 	select_sql(db, sql, result_callback, NULL);
 
 	sqlite3_close(db);
